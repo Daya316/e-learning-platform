@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HTML & CSS Course</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+</head>
+<body>
+  <header>
+    <h1 data-aos="fade-down">Course: HTML & CSS Fundamentals</h1>
+    <nav data-aos="fade-up">
+      <a href="index.html">Back to Courses</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="video-section" data-aos="zoom-in">
+      <h2>Introduction Video</h2>
+      <iframe width="560" height="315"
+        src="https://www.youtube.com/embed/UB1O30fR-EE"
+        title="HTML & CSS Video"
+        frameborder="0"
+        allowfullscreen>
+      </iframe>
+    </section>
+
+    <section class="progress-tracker" data-aos="fade-up">
+      <h2>Track Your Progress</h2>
+      <label for="progress">Progress (%):</label>
+      <input type="range" id="progress" min="0" max="100" value="0" />
+      <span id="progressValue">0%</span>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>AOS.init();</script>
+</body>
+</html>
