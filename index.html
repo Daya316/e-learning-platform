@@ -1,41 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>E-Learning Platform</title>
-  <link rel="stylesheet" href="style.css"/>
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <meta charset="UTF-8">
+  <title>E-LEARNING PLATFORM</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1 data-aos="fade-down">E-Learn Page</h1>
-    <nav data-aos="fade-up">
-      <a href="index.html">Courses</a>
-      <a href="course.html">My Progress</a>
-    </nav>
-  </header>
 
-  <main class="course-list">
-    <h2 data-aos="zoom-in">Available Courses</h2>
-    
-    <div class="card" data-aos="fade-up">
-  <img src="assets/html and css.png" alt="HTML CSS Course Image"/>
-  <h3>HTML & CSS Fundamentals</h3>
-  <p>Learn how to build beautiful websites from scratch.</p>
-  <a href="course.html" class="btn">Start Course</a>
-</div>
+<header class="home-header">
+  <h1>LEARNING PAGE</h1>
+  <p>Learn • Track • Grow</p>
+  <a href="courses.html" class="btn primary">Go to Courses</a>
+</header>
 
-<div class="card" data-aos="fade-up" data-aos-delay="100">
-  <img src="assets/javascript.png" alt="JavaScript Course Image"/>
-  <h3>JavaScript Essentials</h3>
-  <p>Master the language of the web with real examples.</p>
-  <a href="course.html" class="btn">Start Course</a>
-</div>
+<section class="history-section">
+  <h2>📘 History</h2>
+  <ul id="historyList"></ul>
+</section>
 
-  </main>
+<script>
+  const historyList = document.getElementById("historyList");
+  const history = JSON.parse(localStorage.getItem("learningHistory")) || [];
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>AOS.init();</script>
+  if (history.length === 0) {
+    historyList.innerHTML = "<li>No courses opened yet</li>";
+  } else {
+    history.slice().reverse().forEach(item => {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${item.name}</strong><br><small>${item.time}</small>`;
+      historyList.appendChild(li);
+    });
+  }
+</script>
+
 </body>
 </html>
