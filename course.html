@@ -1,41 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>HTML & CSS Course</title>
-  <link rel="stylesheet" href="style.css"/>
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <meta charset="UTF-8">
+  <title>Course Player</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .learning-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      gap: 30px;
+    }
+
+    #player {
+      width: 90%;
+      max-width: 1000px;
+      height: 520px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }
+
+    progress {
+      width: 350px;
+      height: 22px;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1 data-aos="fade-down">Course: HTML & CSS Fundamentals</h1>
-    <nav data-aos="fade-up">
-      <a href="index.html">Back to Courses</a>
-    </nav>
-  </header>
 
-  <main>
-    <section class="video-section" data-aos="zoom-in">
-      <h2>Introduction Video</h2>
-      <iframe width="560" height="315"
-        src="https://www.youtube.com/embed/UB1O30fR-EE"
-        title="HTML & CSS Video"
-        frameborder="0"
-        allowfullscreen>
-      </iframe>
-    </section>
+<header class="page-header">
+  <h1 id="courseTitle"></h1>
+  <a href="courses.html">Back to Courses</a>
+</header>
 
-    <section class="progress-tracker" data-aos="fade-up">
-      <h2>Track Your Progress</h2>
-      <label for="progress">Progress (%):</label>
-      <input type="range" id="progress" min="0" max="100" value="0" />
-      <span id="progressValue">0%</span>
-    </section>
-  </main>
+<main class="learning-container">
+  <div id="player"></div>
 
-  <script src="script.js"></script>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>AOS.init();</script>
+  <div>
+    <h3>Progress</h3>
+    <progress id="progressBar" value="0" max="100"></progress>
+    <div id="progressText">0%</div>
+  </div>
+</main>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const course = params.get("course");
+
+  const courses = {
+    html: {
+      title: "HTML & CSS Fundamentals",
+      videoId: "UB1O30fR-EE"
+    },
+    js: {
+      title: "JavaScript Essentials",
+      videoId: "W6NZfCO5SIk"
+    }
+  };
+
+  if (!courses[course]) {
+    alert("Course not found");
+    window.location.href = "courses.html";
+  }
+
+  document.getElementById("courseTitle").textContent =
+    courses[course].title;
+
+  /* SAVE LEARNING HISTORY */
+  const history = JSON.parse(localStorage.getItem("learningHistory")) || [];
+  history.push({
+    name: courses[course].title,
+    time: new Date().toLocaleString()
+  });
+  localStorage.setItem("learningHistory", JSON.stringify(history));
+
+  let player;
+  let timer = null;
+
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player("player", {
+      videoId: courses[course].videoId,
+      events: {
+        onStateChange: onPlayerStateChange
+      }
+    });
+  }
+
+  function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.PLAYING) {
+      startProgress();
+    } else {
+      stopProgress();
+    }
+  }
+
+  function startProgress() {
+    stopProgress();
+    timer = setInterval(() => {
+      const percent = Math.floor(
+        (player.getCurrentTime() / player.getDuration()) * 100
+      );
+      document.getElementById("progressBar").value = percent;
+      document.getElementById("progressText").textContent = percent + "%";
+    }, 500);
+  }
+
+  function stopProgress() {
+    if (timer) clearInterval(timer);
+  }
+</script>
+
 </body>
 </html>
